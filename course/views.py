@@ -9,6 +9,11 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
 
 
+class CourseCreateAPIView(generics.CreateAPIView):
+    serializer_class = CourseSerializers
+    queryset = Course.objects.all()
+
+
 class LessonListView(generics.ListAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()

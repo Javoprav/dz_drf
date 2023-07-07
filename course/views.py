@@ -47,3 +47,8 @@ class PaymentsListView(generics.ListAPIView):
     filterset_fields = ['payment_type', 'course', 'lesson']
     filterset_class = FilterSet
     ordering_fields = ['payment_date']
+
+"""Фильтрация для эндпоинтов вывода списка платежей с возможностями:
+менять порядок сортировки по дате оплаты,
+фильтровать по курсу или уроку,
+фильтровать по способу оплаты."""

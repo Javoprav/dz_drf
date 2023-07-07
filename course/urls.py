@@ -8,6 +8,7 @@ router.register(r'course', CourseViewSet, basename='course')
 
 urlpatterns = [
     path('lesson/', LessonListView.as_view(), name='lesson_list'),
+    path('payments/', PaymentsListView.as_view(), name='payments_list'),
     path('lesson/<int:pk>/', LessonDetailView.as_view(), name='lesson_Detail'),
     path('lesson/create/', LessonCreateAPIView.as_view(), name='lesson_create'),
     path('course/create/', CourseCreateAPIView.as_view(), name='course_create'),

@@ -26,3 +26,9 @@ class UsersSerializers(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'phone', 'city', 'all_payments', 'role')
+
+
+class ForAuthUserSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'phone', 'city')

@@ -1,12 +1,10 @@
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
-
 from course.models import Course, Lesson, Payments
 from course.permissions import IsModerator
 from course.serializers.serializers import CourseSerializers, LessonSerializers, PaymentsSerializers
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-
 from users.models import UserRoles
 
 
@@ -57,9 +55,9 @@ class LessonCreateAPIView(generics.CreateAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.is_superuser:
-            return Course.objects.all()
+            return Lesson.objects.all()
         else:
-            return Course.objects.filter(owner=user)
+            return Lesson.objects.filter(owner=user)
 
 
 class LessonDetailView(generics.RetrieveAPIView):
@@ -70,9 +68,9 @@ class LessonDetailView(generics.RetrieveAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.is_staff or user.is_superuser or user.role == UserRoles.MODERATOR:
-            return Course.objects.all()
+            return Lesson.objects.all()
         else:
-            return Course.objects.filter(owner=user)
+            return Lesson.objects.filter(owner=user)
 
 
 class LessonUpdateView(generics.UpdateAPIView):

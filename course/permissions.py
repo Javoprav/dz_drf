@@ -3,7 +3,7 @@ from users.models import UserRoles
 
 
 class IsModerator(BasePermission):
-    message = 'Вы не являетесь модератором или владельцем!'
+    message = 'Вы являетесь модератором!'
 
     # def has_permission(self, request, view):
     #     # if view.action in ['create', 'retrieve', 'update', 'partial_update', 'destroy']:

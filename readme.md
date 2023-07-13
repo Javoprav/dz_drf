@@ -13,7 +13,7 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 ```bash
-python manage.py loaddata data.json
+python manage.py loaddata data1.json
 ```
 ```bash
 python3 manage.py create_user

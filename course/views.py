@@ -2,6 +2,7 @@ from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 
 from course.models import Course, Lesson, Payments
+from course.permissions import IsOwnerOrModerator, IsOwner
 from course.serializers.serializers import CourseSerializers, LessonSerializers, PaymentsSerializers
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
@@ -10,43 +11,43 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializers
     queryset = Course.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
 
 class CourseCreateAPIView(generics.CreateAPIView):
     serializer_class = CourseSerializers
     queryset = Course.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
 
 class LessonListView(generics.ListAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
 
 class LessonDetailView(generics.RetrieveAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
 
 class LessonUpdateView(generics.UpdateAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
 
 
 class LessonDeleteView(generics.DestroyAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner]
 
 
 class PaymentsListView(generics.ListAPIView):

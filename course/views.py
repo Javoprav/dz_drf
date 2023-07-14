@@ -33,6 +33,16 @@ class CourseCreateAPIView(generics.CreateAPIView):
         else:
             return Course.objects.filter(owner=user)
 
+    def post(self, request, *args, **kwargs):
+
+        """В этом коде мы создаем копию объекта request.data с помощью метода copy(). Затем мы вносим изменения в эту
+        копию, присваивая request.user.id в поле 'user'. После этого мы передаем измененные данные в метод create()
+        для создания урока."""
+
+        data = request.data.copy()
+        data['owner'] = request.user.id
+        return self.create(data, *args, **kwargs)
+
 
 class LessonListView(generics.ListAPIView):
     serializer_class = LessonSerializers
@@ -58,6 +68,16 @@ class LessonCreateAPIView(generics.CreateAPIView):
             return Lesson.objects.all()
         else:
             return Lesson.objects.filter(owner=user)
+
+    def post(self, request, *args, **kwargs):
+
+        """В этом коде мы создаем копию объекта request.data с помощью метода copy(). Затем мы вносим изменения в эту
+        копию, присваивая request.user.id в поле 'user'. После этого мы передаем измененные данные в метод create()
+        для создания урока."""
+
+        data = request.data.copy()
+        data['owner'] = request.user.id
+        return self.create(data, *args, **kwargs)
 
 
 class LessonDetailView(generics.RetrieveAPIView):

@@ -5,7 +5,7 @@ from users.models import User, UserRoles
 class Command(BaseCommand):
     def handle(self, *args, **options):
         user = User.objects.create(
-            email='user@user.com',
+            email='user@user1.com',
             is_staff=False,
             is_superuser=False,
             is_active=True,
@@ -15,7 +15,7 @@ class Command(BaseCommand):
         user.save()
 
         moder = User.objects.create(
-            email='moder@moder.com',
+            email='moder@moder1.com',
             is_staff=True,
             is_superuser=False,
             is_active=True,

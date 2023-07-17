@@ -18,7 +18,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer) -> None:
         """Сохраняет новому объекту владельца"""
-        serializer.save(user=self.request.user)
+        serializer.save(owner=self.request.user)
 
     # def perform_update(self, serializer):
     #     """Сохраняет объект и отправляет письмо"""
@@ -47,7 +47,7 @@ class CourseCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer) -> None:
         """Сохраняет новому объекту владельца"""
-        serializer.save(user=self.request.user)
+        serializer.save(owner=self.request.user)
 
     # def post(self, request, *args, **kwargs):
     #

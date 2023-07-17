@@ -24,10 +24,13 @@ class CourseSerializers(serializers.ModelSerializer):
     sub_status = serializers.SerializerMethodField()
 
     def get_sub_status(self, instance):
+        """При этом при выборке данных по курсу пользователю необходимо присылать признак подписки текущего
+        пользователя на курс. То есть давать информацию, подписан пользователь на обновления курса или нет."""
         user = self.context['request'].user.id
         obj = SubscriptionCourse.objects.filter(course=instance).filter(user=user)
+        print(obj.first().status)
         if obj:
-            return obj.first().subscription_set.first().status
+            return obj.first().status
         return False
 
     def get_number_of_lesson(self, course):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from course.models import Course, Lesson, Payments
+from course.models import Course, Lesson, Payments, SubscriptionCourse
 from course.validators import UrlValidator
 
 
@@ -25,7 +25,7 @@ class CourseSerializers(serializers.ModelSerializer):
 
     def get_sub_status(self, instance):
         user = self.context['request'].user.id
-        obj = Payments.objects.filter(course=instance).filter(user=user)
+        obj = SubscriptionCourse.objects.filter(course=instance).filter(user=user)
         if obj:
             return obj.first().subscription_set.first().status
         return False
@@ -51,5 +51,5 @@ class PaymentsSerializers(serializers.ModelSerializer):
 
 class SubscriptionCourseSerializers(serializers.ModelSerializer):
     class Meta:
-        model = Payments
+        model = SubscriptionCourse
         fields = "__all__"

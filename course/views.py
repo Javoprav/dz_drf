@@ -1,6 +1,7 @@
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 from course.models import Course, Lesson, Payments, SubscriptionCourse
+from course.pagination import CoursePagination, LessonPagination
 from course.permissions import IsModerator
 from course.serializers.serializers import CourseSerializers, LessonSerializers, PaymentsSerializers, \
     SubscriptionCourseSerializers
@@ -15,6 +16,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializers
     queryset = Course.objects.all()
     permission_classes = [IsAuthenticated]
+    pagination_class = CoursePagination
 
     def perform_create(self, serializer) -> None:
         """Сохраняет новому объекту владельца"""
@@ -64,6 +66,7 @@ class LessonListView(generics.ListAPIView):
     serializer_class = LessonSerializers
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated]
+    pagination_class = LessonPagination
 
     def get_queryset(self):
         user = self.request.user

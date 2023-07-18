@@ -28,7 +28,6 @@ class CourseSerializers(serializers.ModelSerializer):
         пользователя на курс. То есть давать информацию, подписан пользователь на обновления курса или нет."""
         user = self.context['request'].user.id
         obj = SubscriptionCourse.objects.filter(course=instance).filter(user=user)
-        print(obj.first().status)
         if obj:
             return obj.first().status
         return False

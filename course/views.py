@@ -7,8 +7,6 @@ from course.serializers.serializers import CourseSerializers, LessonSerializers,
     SubscriptionCourseSerializers
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-
-from course.services import course_update
 from users.models import UserRoles
 
 

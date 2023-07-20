@@ -8,6 +8,10 @@ from course.serializers.serializers import CourseSerializers, LessonSerializers,
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from users.models import UserRoles
+import stripe
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.conf import settings
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -162,3 +166,7 @@ class SubscriptionUpdateView(generics.UpdateAPIView):
     queryset = SubscriptionCourse.objects.all()
     permission_classes = [IsAuthenticated]
 
+
+class PaymentView(APIView):
+    def post(self, request):
+        pass

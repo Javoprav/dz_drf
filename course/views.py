@@ -185,3 +185,19 @@ class PaymentCreateView(generics.CreateAPIView):
         print(session)
         create_payment(course, user)
         return Response(session.url)
+
+
+class GetPaymentView(APIView):
+    """Получение информации о платеже"""
+    def get(self, request, payment_id):
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        payment_intent = stripe.PaymentIntent.retrieve(payment_id)
+        print(payment_intent)
+        print(payment_intent.status)
+        print(payment_intent.amount)
+        print(payment_intent.currency)
+        return Response({
+            'status': payment_intent.status,
+            'amount': payment_intent.amount,
+            'currency': payment_intent.currency
+        })

@@ -167,3 +167,4 @@ SIMPLE_JWT = {
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 DOMAIN = os.getenv('DOMAIN', 'http://127.0.0.1:8000')
+STRIPE_URL = os.getenv('STRIPE_URL')

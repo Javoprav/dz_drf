@@ -7,13 +7,14 @@ from course.permissions import IsModerator
 from course.serializers.serializers import *
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-
+import requests
 from course.services import checkout_session, create_payment
 from users.models import UserRoles
 import stripe
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -152,6 +153,7 @@ class PaymentsListView(generics.ListAPIView):
     ordering_fields = ['payment_date']
     permission_classes = [IsAuthenticated]
 
+
 """Фильтрация для эндпоинтов вывода списка платежей с возможностями:
 менять порядок сортировки по дате оплаты,
 фильтровать по курсу или уроку,
@@ -175,22 +177,27 @@ class PaymentCreateView(generics.CreateAPIView):
     queryset = Payments.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def post(self,  request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         """Создание платежа"""
         stripe_key = settings.STRIPE_SECRET_KEY
         course_id = request.data['course']
         user = request.user
         course = get_object_or_404(Course, pk=request.data['course'])
-        session = checkout_session(course)
-        print(session)
-        create_payment(course, user)
-        return Response(session.url)
+        try:
+            session = checkout_session(course, user)
+            create_payment(course, user)
+            return Response(session['id'])
+        except Exception:
+            return Response({'error': str(Exception)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GetPaymentView(APIView):
     """Получение информации о платеже"""
+
     def get(self, request, payment_id):
         payment_intent = stripe.PaymentIntent.retrieve(payment_id)
+        print(payment_intent)
         return Response({
-            'status': payment_intent.status,
-        })
+            'status': payment_intent.status, })
+
+

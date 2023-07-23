@@ -1,5 +1,5 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, generics
+from django.shortcuts import get_object_or_404, redirect
+from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from course.models import *
 from course.pagination import CoursePagination, LessonPagination
@@ -7,11 +7,14 @@ from course.permissions import IsModerator
 from course.serializers.serializers import *
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+
+from course.services import checkout_session, create_payment
 from users.models import UserRoles
 import stripe
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -173,16 +176,12 @@ class PaymentCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self,  request, *args, **kwargs):
-        """Создает платежное намерение"""
-        stripe_key = settings.STRIPE_API_KEY
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            course_id = serializer.validated_data['course']
-            course = Course.objects.filter(pk=course_id)
-            course1 = get_object_or_404(Course, pk=kwargs['pk'])
-            user = request.user
-            print(course_id)
-            print(course)
-            print(course1)
-            print(user)
-            # try:
+        """Создание платежа"""
+        stripe_key = settings.STRIPE_SECRET_KEY
+        course_id = request.data['course']
+        user = request.user
+        course = get_object_or_404(Course, pk=request.data['course'])
+        session = checkout_session(course)
+        print(session)
+        create_payment(course, user)
+        return Response(session.url)

@@ -182,7 +182,6 @@ class PaymentCreateView(generics.CreateAPIView):
         user = request.user
         course = get_object_or_404(Course, pk=request.data['course'])
         session = checkout_session(course)
-        print(session)
         create_payment(course, user)
         return Response(session.url)
 
@@ -192,10 +191,6 @@ class GetPaymentView(APIView):
     def get(self, request, payment_id):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         payment_intent = stripe.PaymentIntent.retrieve(payment_id)
-        print(payment_intent)
-        print(payment_intent.status)
-        print(payment_intent.amount)
-        print(payment_intent.currency)
         return Response({
             'status': payment_intent.status,
             'amount': payment_intent.amount,

@@ -196,7 +196,6 @@ class GetPaymentView(APIView):
 
     def get(self, request, payment_id):
         payment_intent = stripe.PaymentIntent.retrieve(payment_id)
-        print(payment_intent)
         return Response({
             'status': payment_intent.status, })
 

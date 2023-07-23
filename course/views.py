@@ -1,10 +1,10 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
-from course.models import Course, Lesson, Payments, SubscriptionCourse
+from course.models import *
 from course.pagination import CoursePagination, LessonPagination
 from course.permissions import IsModerator
-from course.serializers.serializers import CourseSerializers, LessonSerializers, PaymentsSerializers, \
-    SubscriptionCourseSerializers
+from course.serializers.serializers import *
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from users.models import UserRoles
@@ -167,6 +167,22 @@ class SubscriptionUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class PaymentView(APIView):
-    def post(self, request):
-        pass
+class PaymentCreateView(generics.CreateAPIView):
+    serializer_class = PaymentCreateSerializers
+    queryset = Payments.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def post(self,  request, *args, **kwargs):
+        """Создает платежное намерение"""
+        stripe_key = settings.STRIPE_API_KEY
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            course_id = serializer.validated_data['course']
+            course = Course.objects.filter(pk=course_id)
+            course1 = get_object_or_404(Course, pk=kwargs['pk'])
+            user = request.user
+            print(course_id)
+            print(course)
+            print(course1)
+            print(user)
+            # try:

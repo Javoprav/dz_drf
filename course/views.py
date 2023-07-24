@@ -179,24 +179,31 @@ class PaymentCreateView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Создание платежа"""
-        stripe_key = settings.STRIPE_SECRET_KEY
-        course_id = request.data['course']
-        user = request.user
-        course = get_object_or_404(Course, pk=request.data['course'])
-        try:
-            session = checkout_session(course, user)
-            create_payment(course, user)
-            return Response(session['id'])
-        except Exception:
-            return Response({'error': str(Exception)}, status=status.HTTP_400_BAD_REQUEST)
+        # stripe_key = settings.STRIPE_SECRET_KEY
+        # course_id = request.data['course']
+        # user = request.user
+        # course = get_object_or_404(Course, pk=request.data['course'])
+        # try:
+        #     session = checkout_session(course, user)
+        #     create_payment(course, user)
+        #     return Response(session['id'])
+        # except Exception:
+        #     return Response('error',  status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        session = checkout_session(
+            course=serializer.validated_data['course'],
+            user=self.request.user
+        )
+        serializer.save()
+        create_payment(course=serializer.validated_data['course'],
+                       user=self.request.user)
+        return Response(session['id'], status=status.HTTP_201_CREATED)
 
 
 class GetPaymentView(APIView):
     """Получение информации о платеже"""
-
     def get(self, request, payment_id):
         payment_intent = stripe.PaymentIntent.retrieve(payment_id)
         return Response({
             'status': payment_intent.status, })
-
-

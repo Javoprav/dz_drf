@@ -19,6 +19,14 @@ def checkout_session(course, user):
     #         mode='payment',
     #         success_url=settings.DOMAIN + '/success/',
     #         cancel_url=settings.DOMAIN + '/cancel/',)
+    """Да, все верно, он возвращает id сессии...
+
+Ты можешь потом сделать get-запрос на
+GET /v1/checkout/sessions/<session_id>
+и получишь id платежа в поле payment_intent, причем если платеж не был осуществлен (не путать с ошибкой), то сессия будет считаться протухшей, в в поле payment_intent будет стоять null
+
+По нему можно получить сам платеж, где указан статус
+GET /v1/payment_intents/<payment_id>"""
 
     # session = stripe.PaymentIntent.create(
     #     amount=course.price,

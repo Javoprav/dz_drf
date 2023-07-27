@@ -4,7 +4,7 @@ from course.models import *
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('name', 'preview', 'description', 'owner', 'price')
+    list_display = ('id', 'name', 'preview', 'description', 'owner', 'price')
     list_filter = ('name',)
 
 

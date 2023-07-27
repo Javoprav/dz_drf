@@ -14,7 +14,7 @@ import stripe
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
-
+from course.tasks import send_mail_user_update
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -27,6 +27,10 @@ class CourseViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer) -> None:
         """Сохраняет новому объекту владельца"""
         serializer.save(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        self.object = serializer.save()
+        send_mail_user_update.delay(self.object.pk)
 
     # def perform_update(self, serializer):
     #     """Сохраняет объект и отправляет письмо"""

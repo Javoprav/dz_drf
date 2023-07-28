@@ -4,6 +4,7 @@ from course.models import SubscriptionCourse
 from datetime import datetime, timedelta
 from celery import shared_task
 from users.models import User
+from django.utils import timezone
 
 
 @shared_task
@@ -31,18 +32,19 @@ def send_mail_user_update(object_pk):
 def check_user():
     """С помощью celery-beat реализуйте фоновую задачу, которая будет проверять пользователей по дате последнего
     входа по полю last_login и, если пользователь не заходил более месяца, блокировать его с помощью флага is_active """
-    # now_date = datetime.now()
-    # one_month_ago = now_date - timedelta(days=30)
-    # inactive_users = User.objects.filter(last_login__lt=one_month_ago)
-    # inactive_users.update(is_active=False)
-
-    user_list = User.objects.all()
-    for user in user_list:
+    # one_month_ago = timezone.now() - timezone.timedelta(days=30)
+    # inactive_users = User.objects.filter(last_login__lt=one_month_ago, is_active=True)
+    # for user in inactive_users:
+    #     user.is_active = False
+    #     user.save()
+    # user_list = User.objects.all()
+    # for user in user_list:
         # current_time = datetime.now()
         # last_login_user = user.last_login
         # time_difference = current_time - last_login_user
         # if time_difference < timedelta(days=30):
-        if user.last_login < datetime.now() - timedelta(days=30):
-            # user.is_active = False
-            user.update(is_active=False)
-            user.save()
+    now_date = datetime.now()
+    one_month_ago = now_date - timedelta(days=30)
+    inactive_users = User.objects.filter(last_login__lt=one_month_ago)
+    inactive_users.update(is_active=False)
+    print(inactive_users)

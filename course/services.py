@@ -1,7 +1,9 @@
 import stripe
 from django.conf import settings
 import requests
-from course.models import Payments
+from django.core.mail import send_mail
+
+from course.models import Payments, Course, SubscriptionCourse
 
 
 def checkout_session(course, user):
@@ -52,3 +54,4 @@ def create_payment(course, user):
         course=course,
         payment_sum=course.price,
     )
+

@@ -8,6 +8,7 @@ class Course(models.Model):
     description = models.TextField(verbose_name='описание', **NULLABLE)
     owner = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='создатель', **NULLABLE)
     price = models.PositiveIntegerField(default=1000, verbose_name='стоимость курса')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='обновлен', **NULLABLE)
 
     class Meta:
         verbose_name = 'Курс'

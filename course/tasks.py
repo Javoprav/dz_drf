@@ -34,6 +34,6 @@ def check_user():
     входа по полю last_login и, если пользователь не заходил более месяца, блокировать его с помощью флага is_active """
     user_list = User.objects.all()
     for user in user_list:
-        if user.last_login > datetime.now() - timedelta(days=30):
+        if user.last_login < datetime.now() - timedelta(days=30):
             user.is_active = False
             user.save()

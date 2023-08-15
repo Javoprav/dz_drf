@@ -22,7 +22,10 @@ python3 manage.py create_user
 ```bash
 python manage.py runserver
 ```
-
+Собрать и запустить образ docker-compose
+```bash
+ docker-compose up -d --build
+```
 
 
 

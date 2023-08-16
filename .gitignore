@@ -4,3 +4,5 @@
 .env
 /test_data.json
 /resp.json
+/data/cache/dump.rdb
+/.env.docker

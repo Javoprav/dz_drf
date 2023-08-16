@@ -2,12 +2,14 @@ version: '3.9'
 
 services:
   db:
+    restart: always
     container_name: db
     env_file:
       - ./.env
     image: postgres:14.9-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./.env.docker
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready' ]
       interval: 10s
@@ -22,6 +24,7 @@ services:
       - ./data/cache:/data
 
   api:
+    restart: always
     build:
       context: .
     container_name: api
@@ -36,6 +39,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+      - ./.env.docker/:/app/.env
     command: >
       bash -c "python  manage.py collectstatic --noinput
       && python manage.py makemigrations
